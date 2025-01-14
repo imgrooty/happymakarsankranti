@@ -44,7 +44,9 @@ export function WishesGenerator() {
   const [isPopupOpen, setIsPopupOpen] = useState(false)
 
   useEffect(() => {
-    generateWish()
+    if (typeof window !== 'undefined') {
+      generateWish()
+    }
   }, [])
 
   const generateWish = () => {
@@ -57,11 +59,13 @@ export function WishesGenerator() {
   }
 
   const sendWishViaWhatsApp = (phoneNumber: string) => {
-    const wishText = encodeURIComponent(currentWish)
-    const imageUrl = encodeURIComponent(currentImage)
-    const whatsappUrl = `https://wa.me/${phoneNumber}?text=${wishText}%0A%0A${imageUrl}`
-    window.open(whatsappUrl, "_blank")
-    setIsPopupOpen(false)
+    if (typeof window !== 'undefined') {
+      const wishText = encodeURIComponent(currentWish)
+      const imageUrl = encodeURIComponent(currentImage)
+      const whatsappUrl = `https://wa.me/${phoneNumber}?text=${wishText}%0A%0A${imageUrl}`
+      window.open(whatsappUrl, "_blank")
+      setIsPopupOpen(false)
+    }
   }
 
   return (
@@ -114,6 +118,6 @@ export function WishesGenerator() {
         onSend={sendWishViaWhatsApp}
       />
     </section>
+    
   )
 }
-
