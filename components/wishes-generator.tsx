@@ -21,12 +21,7 @@ const wishes = [
   "🎆 Celebrate with a heart full of warmth 💖 and a soul full of light ✨. May this Makar Sankranti bring you all the joy you deserve!",
   "🌻 May this Makar Sankranti be the start of a year full of growth 🌱, success 🎯, and bright new beginnings 🌅.",
   "💫 May the kites of Makar Sankranti lift you to success 🌟, and may you find joy in every step you take 🏆.",
-  "🎉 Happy Makar Sankranti! May your days be as sweet as tilgul 🍬, your heart as warm as the sun ☀️, and your life full of happiness! 🎇",
-  "May this Makar Sankranti fill your life with joy and prosperity",
-  "Wishing you a harvest of happiness and success this Sankranti",
-  "Let the warmth of Sankranti bring happiness to your home",
-  "May your life soar high like the colorful kites this festival",
-  "Sending you sweet wishes on this auspicious day of Makar Sankranti"
+  "🎉 Happy Makar Sankranti! May your days be as sweet as tilgul 🍬, your heart as warm as the sun ☀️, and your life full of happiness! 🎇"
 ]
 
 const imageUrls = [
@@ -67,6 +62,8 @@ export function WishesGenerator() {
       setIsPopupOpen(false)
     }
   }
+
+  if (typeof window === 'undefined') return null
 
   return (
     <section className="py-20 px-4 bg-orange-50">
@@ -118,6 +115,5 @@ export function WishesGenerator() {
         onSend={sendWishViaWhatsApp}
       />
     </section>
-    
   )
 }
