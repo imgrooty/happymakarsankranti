@@ -2,7 +2,7 @@
 
 import { motion, useAnimation } from "framer-motion"
 import { Sun, Star } from 'lucide-react'
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 import { Button } from "./ui/button"
 
 export function HeroSection() {
@@ -14,6 +14,86 @@ export function HeroSection() {
       transition: { duration: 2, repeat: Infinity }
     })
   }, [controls])
+
+  const [sweets, setSweets] = useState<Array<{
+    id: number;
+    y: number;
+    x: number;
+    opacity: number;
+  }>>([])
+
+  useEffect(() => {
+    const generateSweets = () => {
+      const windowWidth = typeof window !== 'undefined' ? window.innerWidth : 1000
+      return Array(8).fill(null).map((_, i) => ({
+        id: i,
+        y: Math.random() * 500,
+        x: Math.random() * windowWidth,
+        opacity: 0
+      }))
+    }
+
+    setSweets(generateSweets())
+  }, [])
+
+  const [kites, setKites] = useState<Array<{
+    id: number;
+    x: number;
+    y: number;
+  }>>([])
+
+  useEffect(() => {
+    const generateKites = () => {
+      const windowWidth = typeof window !== 'undefined' ? window.innerWidth : 1000
+      return Array(5).fill(null).map((_, i) => ({
+        id: i,
+        x: -100,
+        y: Math.random() * 500,
+      }))
+    }
+
+    setKites(generateKites())
+  }, [])
+
+  const [particles, setParticles] = useState<Array<{
+    id: number;
+    x: number;
+    y: number;
+    opacity: number;
+  }>>([])
+
+  useEffect(() => {
+    const generateParticles = () => {
+      const windowHeight = typeof window !== 'undefined' ? window.innerHeight : 1000
+      const windowWidth = typeof window !== 'undefined' ? window.innerWidth : 1000
+      return Array(50).fill(null).map((_, i) => ({
+        id: i,
+        x: Math.random() * windowWidth,
+        y: Math.random() * windowHeight,
+        opacity: 0,
+      }))
+    }
+
+    setParticles(generateParticles())
+  }, [])
+
+  const [stars, setStars] = useState<Array<{
+    id: number;
+    top: number;
+    left: number;
+  }>>([])
+
+  useEffect(() => {
+    const generateStars = () => {
+      return Array(20).fill(null).map((_, i) => ({
+        id: i,
+        top: Math.random() * 100,
+        left: Math.random() * 100,
+      }))
+    }
+
+    setStars(generateStars())
+  }, [])
 
   const scrollToWishes = () => {
     const wishesSection = document.getElementById('wishes-section')
@@ -48,19 +128,23 @@ export function HeroSection() {
       </motion.div>
 
       {/* Floating Til-Gul (Sesame-Jaggery Sweets) */}
-      {[...Array(8)].map((_, i) => (
+      {sweets.map((sweet) => (
         <motion.div
-          key={`sweet-${i}`}
-          initial={{ y: Math.random() * 500, x: Math.random() * window.innerWidth, opacity: 0 }}
+          key={`sweet-${sweet.id}`}
+          initial={{ 
+            y: sweet.y, 
+            x: sweet.x, 
+            opacity: sweet.opacity 
+          }}
           animate={{ 
-            y: [Math.random() * 500, Math.random() * 500],
-            x: [Math.random() * window.innerWidth, Math.random() * window.innerWidth],
+            y: [sweet.y, Math.random() * 500],
+            x: [sweet.x, Math.random() * (typeof window !== 'undefined' ? window.innerWidth : 1000)],
             opacity: [0, 1, 0]
           }}
           transition={{
             duration: 10,
             repeat: Infinity,
-            delay: i * 0.5,
+            delay: sweet.id * 0.5,
             ease: "easeInOut"
           }}
           className="absolute"
@@ -70,18 +154,18 @@ export function HeroSection() {
       ))}
 
       {/* Flying Kites with Trails */}
-      {[...Array(5)].map((_, i) => (
+      {kites.map((kite) => (
         <motion.div
-          key={`kite-${i}`}
-          initial={{ x: -100, y: Math.random() * 500 }}
+          key={`kite-${kite.id}`}
+          initial={{ x: kite.x, y: kite.y }}
           animate={{ 
-            x: window.innerWidth + 100,
+            x: typeof window !== 'undefined' ? window.innerWidth + 100 : 1000,
             y: Math.random() * 500,
           }}
           transition={{
             duration: 20,
             repeat: Infinity,
-            delay: i * 2,
+            delay: kite.id * 2,
             ease: "linear"
           }}
           className="absolute"
@@ -107,21 +191,21 @@ export function HeroSection() {
       ))}
 
       {/* Decorative Stars */}
-      {[...Array(20)].map((_, i) => (
+      {stars.map((star) => (
         <motion.div
-          key={`star-${i}`}
+          key={`star-${star.id}`}
           initial={{ opacity: 0 }}
           animate={{ opacity: [0, 1, 0] }}
           transition={{
             duration: 2,
             repeat: Infinity,
-            delay: i * 0.1,
+            delay: star.id * 0.1,
             ease: "easeInOut"
           }}
           className="absolute"
           style={{
-            top: `${Math.random() * 100}%`,
-            left: `${Math.random() * 100}%`,
+            top: `${star.top}%`,
+            left: `${star.left}%`,
           }}
         >
           <Star className="w-4 h-4 text-yellow-400" />
@@ -130,23 +214,23 @@ export function HeroSection() {
 
       {/* Particle Effects */}
       <div className="absolute inset-0 pointer-events-none">
-        {[...Array(50)].map((_, i) => (
+        {particles.map((particle) => (
           <motion.div
-            key={`particle-${i}`}
+            key={`particle-${particle.id}`}
             initial={{ 
-              opacity: 0,
-              y: Math.random() * window.innerHeight,
-              x: Math.random() * window.innerWidth 
+              opacity: particle.opacity,
+              y: particle.y,
+              x: particle.x 
             }}
             animate={{ 
-              opacity: [0, 1, 0],
-              y: [null, Math.random() * window.innerHeight],
-              x: [null, Math.random() * window.innerWidth]
+              opacity: [particle.opacity, 1, 0],
+              y: [particle.y, Math.random() * (typeof window !== 'undefined' ? window.innerHeight : 1000)],
+              x: [particle.x, Math.random() * (typeof window !== 'undefined' ? window.innerWidth : 1000)]
             }}
             transition={{
               duration: 5,
               repeat: Infinity,
-              delay: i * 0.2,
+              delay: particle.id * 0.2,
               ease: "easeInOut"
             }}
             className="absolute w-2 h-2 bg-yellow-300 rounded-full"
